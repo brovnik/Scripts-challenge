@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Script challenge - Script #1
+# 2025 - Brovnik
+# With this script you can check IPv4, IPv6, and MAC and copy them to clipboard
+
+show_help(){
+    printf "\tWith quip you can check IPv4, IPv6, MAC address, and copy them to the clipboard.\n\n"
+    printf "\tquip <options>:\n"
+	printf "\t-4 Save IPv4 address to the clipboard.\n"
+	printf "\t-6 Save IPv6 address to the clipboard.\n"
+	printf "\t-m Save MAC address to the clipboard.\n"
+	printf "\t-a Displays all of the above in the terminal.\n"
+}
+
+# Getting the network interface 
+interface=$(ip route get 8.8.8.8 | awk '{print $5}' | head -n1) 
+ipv4=$(ip -4 address show "${interface}" | grep inet | awk '{print $2}' | cut -d/ -f1)
+ipv6=$(ip -6 address show "${interface}" | grep inet6 | awk '{print $2}' | cut -d/ -f1)
+mac=$(ip a s "${interface}" | awk '/link\/ether/ {print $2}')
+
+# Shows help if there is no flag 
+[[ $# -eq 0 ]] && { show_help; exit 0; }
+
+# Checks for dependency: xclip
+if ! command -v xclip >/dev/null 2>&1; then
+    echo "Missing dependency: xclip."
+    exit 1
+fi
+
+while getopts "46ma" opt; do
+    case $opt in
+        4) echo $ipv4 | xclip -selection clipboard
+           echo "IPv4 copied to clipboard...";;
+        6) echo $ipv6 | xclip -selection clipboard
+           echo "IPv6 copied to clipboard...";;
+        m) echo $mac | xclip -selection clipboard
+           echo "MAC copied to clipboard...";;
+        a) show_all="true";;
+        *) show_help;;
+    esac
+done
+
+if [[ $show_all == "true" ]]; then
+printf "\e[1m\e[32mIPv4: \e[0m${ipv4}\n"
+printf "\e[1m\e[33mIPv6: \e[0m${ipv6}\n"
+printf "\e[1m\e[34mMAC : \e[0m${mac}\n"
+fi
