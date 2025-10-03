@@ -23,6 +23,7 @@ case "$OS" in
     if ! command -v xclip >/dev/null 2>&1; then
         printf "Missing dependency: xclip\n"
         printf "You can install it with sudo apt install xclip\n"
+    exit 1
     fi
     ;;
     almalinux|centos|rhel)
@@ -30,6 +31,7 @@ case "$OS" in
     if ! command -v xsel >/dev/null 2>&1; then
         printf "Missing dependency: xsel\n"
         printf "You can install it with sudo dnf install xsel\n"
+    exit 2
     fi
     ;;
     arch)
@@ -37,11 +39,12 @@ case "$OS" in
     if ! command -v xclip >/dev/null 2>&1; then
         printf "Missing dependency: xclip\n"
         printf "You can install it with sudo pacman xclip\n"
+    exit 3
     fi
         ;;
     *)
     echo "This script is not supported for your distribution."
-    exit 1
+    exit 4
 esac
 
 # Getting the network interface 
