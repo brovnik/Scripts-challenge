@@ -2,7 +2,7 @@
 
 # Script challenge - Script #1
 # 2025 - Brovnik
-# With this script you can check IPv4, IPv6, and MAC and copy them to clipboard
+# With this script you can quickly check IPv4, IPv6, and MAC and copy them to clipboard
 
 show_help(){
     printf "\tWith quip you can check IPv4, IPv6, MAC address, and copy them to the clipboard.\n\n"
@@ -24,25 +24,25 @@ case "$OS" in
         printf "Missing dependency: xclip\n"
         printf "You can install it with sudo apt install xclip\n"
     exit 1
-    fi
-    ;;
+    fi;;
+
     almalinux|centos|rhel)
     family="rhel"
     if ! command -v xsel >/dev/null 2>&1; then
         printf "Missing dependency: xsel\n"
         printf "You can install it with sudo dnf install xsel\n"
     exit 2
-    fi
-    ;;
+    fi;;
+
     arch)
     family="arch"
     if ! command -v xclip >/dev/null 2>&1; then
         printf "Missing dependency: xclip\n"
-        printf "You can install it with sudo pacman xclip\n"
+        printf "You can install it with sudo pacman -Syu xclip\n"
     exit 3
-    fi
-        ;;
-    *)
+    fi;;
+    
+	*)
     echo "This script is not supported for your distribution."
     exit 4
 esac
