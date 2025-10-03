@@ -22,7 +22,7 @@
    sudo pacman -Syu xclip
    ```
 
-quip \<flags\>:
+quip flags:
 **-4** Save IPv4 to clipboard
 **-6** Save IPv6 to clipboard
 **-m** Save MAC to clipboard
