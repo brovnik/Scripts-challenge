@@ -13,6 +13,37 @@ show_help(){
 	printf "\t-a Displays all of the above in the terminal.\n"
 }
 
+# Source a file that stores, among other things, the host OS
+. /etc/os-release
+OS=$ID
+
+case "$OS" in
+    ubuntu|debian|linuxmint)
+    family="debian"
+    if ! command -v xclip >/dev/null 2>&1; then
+        printf "Missing dependency: xclip\n"
+        printf "You can install it with sudo apt install xclip\n"
+    fi
+    ;;
+    almalinux|centos|rhel)
+    family="rhel"
+    if ! command -v xsel >/dev/null 2>&1; then
+        printf "Missing dependency: xsel\n"
+        printf "You can install it with sudo dnf install xsel\n"
+    fi
+    ;;
+    arch)
+    family="arch"
+    if ! command -v xclip >/dev/null 2>&1; then
+        printf "Missing dependency: xclip\n"
+        printf "You can install it with sudo pacman xclip\n"
+    fi
+        ;;
+    *)
+    echo "This script is not supported for your distribution."
+    exit 1
+esac
+
 # Getting the network interface 
 interface=$(ip route get 8.8.8.8 | awk '{print $5}' | head -n1) 
 ipv4=$(ip -4 address show "${interface}" | grep inet | awk '{print $2}' | cut -d/ -f1)
@@ -22,22 +53,35 @@ mac=$(ip a s "${interface}" | awk '/link\/ether/ {print $2}')
 # Shows help if there is no flag 
 [[ $# -eq 0 ]] && { show_help; exit 0; }
 
-# Checks for dependency: xclip
-if ! command -v xclip >/dev/null 2>&1; then
-    echo "Missing dependency: xclip."
-    exit 1
-fi
-
 while getopts "46ma" opt; do
     case $opt in
-        4) echo $ipv4 | xclip -selection clipboard
-           echo "IPv4 copied to clipboard...";;
-        6) echo $ipv6 | xclip -selection clipboard
-           echo "IPv6 copied to clipboard...";;
-        m) echo $mac | xclip -selection clipboard
-           echo "MAC copied to clipboard...";;
-        a) show_all="true";;
-        *) show_help;;
+    4)  if [ "$family" == "debian" ] || [ "$family" == "arch" ]; then
+        printf $ipv4 | xclip -selection clipboard
+        fi
+        if [ "$family" == "rhel" ]; then
+        printf $ipv4 | xsel --clipboard
+        fi
+        printf "IPv4 copy to clipboard\n";;
+    
+    6)  if [ "$family" == "debian" ] || [ "$family" == "arch" ]; then
+        printf $ipv6 | xclip -selection clipboard
+        fi
+        if [ "$family" == "rhel" ]; then
+        printf $ipv6 | xsel --clipboard
+        fi
+        printf "IPv6 copy to clipboard\n";;
+    
+    m)  if [ "$family" == "debian" ] || [ "$family" == "arch" ]; then
+        printf $mac | xclip -selection clipboard
+        fi
+        if [ "$family" == "rhel" ]; then
+        printf $mac | xsel --clipboard
+        fi
+        printf "MAC copied to clipboard\n";; 
+
+    a) show_all="true";;
+    
+    *) show_help;;
     esac
 done
 
