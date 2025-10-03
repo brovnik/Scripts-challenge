@@ -22,11 +22,6 @@
    sudo pacman -Syu xclip
    ```
 
-quip flags:
-**-4** Save IPv4 to clipboard
-**-6** Save IPv6 to clipboard
-**-m** Save MAC to clipboard
-**-a** Display all of the above in terminal
 ### Usage
    ```bash
    quip <option>
@@ -35,6 +30,13 @@ quip flags:
    quip -6
    quip -m
    ```
+| Flag | Description                           |
+|------|---------------------------------------|
+| \`-4\` | Save IPv4 to clipboard                |
+| \`-6\` | Save IPv6 to clipboard                |
+| \`-m\` | Save MAC to clipboard                 |
+| \`-a\` | Display all of the above in terminal  |
+
 ### Supported Distributions by Family
 
 **Debian:** Debian, Ubuntu, Linux Mint
