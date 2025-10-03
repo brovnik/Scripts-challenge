@@ -32,10 +32,10 @@
    ```
 | Flag | Description                           |
 |------|---------------------------------------|
-| \-4\ | Save IPv4 to clipboard                |
-| \-6\ | Save IPv6 to clipboard                |
-| \-m\ | Save MAC to clipboard                 |
-| \-a\ | Display all of the above in terminal  |
+| \-4 | Save IPv4 to clipboard                |
+| \-6 | Save IPv6 to clipboard                |
+| \-m | Save MAC to clipboard                 |
+| \-a | Display all of the above in terminal  |
 
 ### Supported Distributions by Family
 
